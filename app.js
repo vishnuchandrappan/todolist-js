@@ -1,22 +1,39 @@
 const request = new XMLHttpRequest();
-let todos = ["list item 1", "list item 2", "list item 3", "list item 4"];
+let todos = [];
+let data = [];
 const todoList = document.querySelector("ul");
 
 request.onload = function(data) {
-
   if (request.status >= 200 && request.status < 300) {
-    todos = JSON.parse(data.target.response);
+    data = JSON.parse(data.target.response);
   } else {
     console.log("Request Failed");
   }
 
-  for (let i = 0; i < 6; i++) {
-    let el = document.createElement("li");
-    el.innerText = todos[i].title;
-    todoList.appendChild(el);
+  for (let i = 0; i < 3; i++) {
+    todos.push(data[i].title);
   }
 
+  display();
 };
 
 request.open("GET", "https://jsonplaceholder.typicode.com/todos");
 request.send();
+
+const btn = document.getElementById("add-todo");
+const todo = document.getElementById("todo");
+
+btn.addEventListener("click", () => {
+  todos.push(todo.value);
+  todo.value="";
+  display();
+});
+
+function display() {
+  todoList.innerHTML = "";
+  todos.forEach(todo => {
+    let el = document.createElement("li");
+    el.innerText = todo;
+    todoList.appendChild(el);
+  });
+}
