@@ -25,7 +25,7 @@ const todo = document.getElementById("todo");
 
 btn.addEventListener("click", () => {
   todos.push(todo.value);
-  todo.value="";
+  todo.value = "";
   display();
 });
 
@@ -34,6 +34,17 @@ function display() {
   todos.forEach(todo => {
     let el = document.createElement("li");
     el.innerText = todo;
+    el.classList.add("todo-item");
     todoList.appendChild(el);
+  });
+
+  const todoItems = document.querySelectorAll(".todo-item");
+
+  todoItems.forEach(todoItem => {
+    todoItem.addEventListener("click", () => {
+      todoItem.style.textDecoration == "line-through" ?
+      todoItem.style.textDecoration = "none" :
+      todoItem.style.textDecoration = "line-through"
+    });
   });
 }
