@@ -31,20 +31,39 @@ btn.addEventListener("click", () => {
 
 function display() {
   todoList.innerHTML = "";
-  todos.forEach(todo => {
+  todos.forEach((todo,index) => {
     let el = document.createElement("li");
-    el.innerText = todo;
+    let btn = document.createElement("span");
+    btn.innerText = 'X';
+    btn.id = "btn-"+index;
+    btn.classList.add('btn');
+    el.appendChild(btn);
+    title = document.createElement("span");
+    title.innerHTML = todo;
+    title.classList.add('title');
+    el.appendChild(title);
     el.classList.add("todo-item");
+    el.id=index;
     todoList.appendChild(el);
   });
 
-  const todoItems = document.querySelectorAll(".todo-item");
+  const todoItems = document.querySelectorAll(".todo-item .title");
 
   todoItems.forEach(todoItem => {
     todoItem.addEventListener("click", () => {
       todoItem.style.textDecoration == "line-through" ?
       todoItem.style.textDecoration = "none" :
       todoItem.style.textDecoration = "line-through"
+    });
+  });
+
+
+  const buttons = document.querySelectorAll('.todo-item .btn');
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click",() => {
+        todos.splice(btn.id.slice(4,6),1);
+        btn.parentElement.remove();
     });
   });
 }
