@@ -26,15 +26,20 @@ const alert = document.querySelector(".alert");
 
 btn.addEventListener("click", () => {
   if (todo.value) {
-    let obj = {
-      userId: 1,
-      id: lastID++,
-      title: todo.value,
-      completed: false
-    };
-    todos[obj.id] = obj;
-    todo.value = "";
-    addToList(obj);
+    let values = todo.value.split(",");
+    values.forEach(value => {
+      if (value.trim()) {
+        let obj = {
+          userId: 1,
+          id: lastID++,
+          title: value.trim(),
+          completed: false
+        };
+        todos[obj.id] = obj;
+        todo.value = "";
+        addToList(obj);
+      }
+    });
   } else {
     alert.innerText = "Todo cannot be empty";
     alert.style.display = "block";
