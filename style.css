@@ -13,7 +13,6 @@ body {
   height: 100vh;
   font-family: "Poppins", sans-serif;
   animation: bodyAnim 1s ease;
-  over
 }
 
 h1 {
@@ -120,6 +119,7 @@ button {
   padding:10px 30px;
   border-radius:3px;
   animation: alertAnim 2s ease;
+  animation-delay: 0.5s;
   transform: translateX(150%);
 }
 
