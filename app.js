@@ -22,59 +22,66 @@ request.send();
 
 const btn = document.getElementById("add-todo");
 const todo = document.getElementById("new-todo");
+const alert = document.querySelector(".alert");
 
 btn.addEventListener("click", () => {
-  let obj = {
-    userId : 1,
-    id : lastID++,
-    title : todo.value,
-    completed : false
+  if (todo.value) {
+    let obj = {
+      userId: 1,
+      id: lastID++,
+      title: todo.value,
+      completed: false
+    };
+    todos[obj.id] = obj;
+    todo.value = "";
+    addToList(obj);
+  } else {
+    alert.innerText = "Todo cannot be empty";
+    alert.style.display = "block";
+    setTimeout(() => {
+      alert.style.display = "none";
+    }, 2000);
   }
-  todos[obj.id]=obj;
-  todo.value = "";
-
-  addToList(obj);
-
 });
 
-function display(){
+function display() {
   todoList.innerHTML = "";
-  todos.forEach( todo => {
+  todos.forEach(todo => {
     addToList(todo);
   });
 }
 
 function addToList(obj) {
-  let el = document.createElement('div');
-  el.classList.add('todo');
+  let el = document.createElement("div");
+  el.classList.add("todo");
   el.id = obj.id;
-  let button = document.createElement('button');
-  button.id = "btn-"+obj.id;
+  let button = document.createElement("button");
+  button.id = "btn-" + obj.id;
   button.innerText = "X";
   addButtonEvent(button);
   el.appendChild(button);
-  let title = document.createElement('span');
+  let title = document.createElement("span");
   title.innerText = obj.title;
   if (obj.completed) {
-    title.classList.add('completed');
+    title.classList.add("completed");
   }
   addCompletedEvent(title);
   el.appendChild(title);
   todoList.appendChild(el);
 }
 
-function addButtonEvent(button){
+function addButtonEvent(button) {
   button.addEventListener("click", () => {
     todos[button.parentElement.id] = {};
     button.parentElement.remove();
   });
 }
 
-function addCompletedEvent(todo){
-  todo.addEventListener("click",() => {
-    todo.classList.toggle('completed');
-    todos[todo.parentElement.id].completed == false ?
-    todos[todo.parentElement.id].completed = true :
-    todos[todo.parentElement.id].completed = false
+function addCompletedEvent(todo) {
+  todo.addEventListener("click", () => {
+    todo.classList.toggle("completed");
+    todos[todo.parentElement.id].completed == false
+      ? (todos[todo.parentElement.id].completed = true)
+      : (todos[todo.parentElement.id].completed = false);
   });
 }

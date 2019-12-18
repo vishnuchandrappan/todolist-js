@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
   transition: 0.3s;
 }
 
@@ -12,6 +12,8 @@ body {
   background: linear-gradient(to bottom, #f3f6ff, #b4c7ff);
   height: 100vh;
   font-family: "Poppins", sans-serif;
+  animation: bodyAnim 1s ease;
+  over
 }
 
 h1 {
@@ -82,13 +84,67 @@ button {
   display: inline;
 }
 
-.completed{
+.completed {
   text-decoration: line-through;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .todos,
   .new-todo {
     width: 90%;
+  }
+}
+
+.todo {
+  animation: todoSlide 0.3s ease-in;
+}
+
+
+@keyframes todoSlide {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+.alert{
+  display: none;
+  position: absolute;
+  top:9vh;
+  right:10px;
+  background-color: tomato;
+  padding:10px 30px;
+  border-radius:3px;
+  animation: alertAnim 2s ease;
+  transform: translateX(150%);
+}
+
+@keyframes alertAnim{
+  0%{
+    transform: translateX(150%);
+  }
+  40%{
+    transform: translateX(0);
+  }
+  90%{
+    transform: translateX(0);
+    display: block;
+  }
+  100%{
+    display: none;
+  }
+}
+
+@keyframes bodyAnim{
+  from{
+    opacity: 0;
+    transform: scale(3);
+  }
+  to{
+    opacity: 1;
   }
 }
