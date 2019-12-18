@@ -10,7 +10,7 @@ request.onload = function(data) {
   }
 
   for (let i = 0; i < 3; i++) {
-    todos.push(data[i]);
+    todos[data[i].id] = data[i];
   }
   lastID = data[3].id;
 
@@ -52,9 +52,9 @@ btn.addEventListener("click", () => {
 
 function display() {
   todoList.innerHTML = "";
-  todos.forEach(todo => {
-    addToList(todo);
-  });
+  for (let i in todos) {
+    addToList(todos[i]);
+  }
 }
 
 function addToList(obj) {
@@ -90,9 +90,14 @@ function addButtonEvent(button) {
 function addCompletedEvent(todo) {
   todo.addEventListener("click", () => {
     todo.classList.toggle("completed");
-    todos[todo.parentElement.id].completed == false
-      ? (todos[todo.parentElement.id].completed = true)
-      : (todos[todo.parentElement.id].completed = false);
+    if (!todos[todo.parentElement.id].completed) {
+      todos[todo.parentElement.id].completed = true
+      alertMessage("Marked as Done");
+    }
+    else{
+      todos[todo.parentElement.id].completed = false
+      alertMessage("Marked as incomplete");
+    }
   });
 }
 
