@@ -79,7 +79,10 @@ function addToList(obj) {
 function addButtonEvent(button) {
   button.addEventListener("click", () => {
     todos[button.parentElement.id] = {};
-    button.parentElement.remove();
+    button.parentElement.style.animation = "deleteAnim 1s ease";
+    setTimeout(() => {
+      button.parentElement.remove();
+    }, 800);
     alertMessage("Todo Deleted");
   });
 }
