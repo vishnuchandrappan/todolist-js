@@ -98,6 +98,10 @@ button {
   animation: todoSlide 0.3s ease-in;
 }
 
+#add-todo, .todo > span{
+  cursor: pointer;
+}
+
 
 @keyframes todoSlide {
   from {
@@ -156,4 +160,8 @@ button {
   to{
     transform: translateX(-150%);
   }
+}
+
+.todo span input{
+  width: 70%;
 }

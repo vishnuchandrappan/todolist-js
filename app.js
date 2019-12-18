@@ -55,6 +55,7 @@ function display() {
   for (let i in todos) {
     addToList(todos[i]);
   }
+  isEmpty();
 }
 
 function addToList(obj) {
@@ -63,8 +64,13 @@ function addToList(obj) {
   el.id = obj.id;
   let button = document.createElement("button");
   button.id = "btn-" + obj.id;
-  button.innerText = "X";
+  button.innerText = "✖️";
   addButtonEvent(button);
+  el.appendChild(button);
+  button = document.createElement("button");
+  button.id = "editBtn-" + obj.id;
+  button.innerText = "🖍";
+  addEditButtonEvent(button);
   el.appendChild(button);
   let title = document.createElement("span");
   title.innerText = obj.title;
@@ -78,15 +84,30 @@ function addToList(obj) {
 
 function addButtonEvent(button) {
   button.addEventListener("click", () => {
-    todos[button.parentElement.id] = {};
+    delete todos[button.parentElement.id];
     button.parentElement.style.animation = "deleteAnim 1s ease";
     setTimeout(() => {
       button.parentElement.remove();
     }, 800);
     alertMessage("Todo Deleted");
+    isEmpty();
   });
 }
 
+function addEditButtonEvent(button) {
+  button.addEventListener("click", () => {
+    let el = document.getElementById(button.parentElement.id).childNodes[2];
+    let input = document.createElement('input');
+    input.type = "text";
+    input.value = el.innerText;
+    el.innerText="";
+    input.addEventListener("change" , () => {
+      el.innerText = input.value;
+      todos[el.parentElement.id].title = input.value;
+    });
+    el.appendChild(input);
+  });
+}
 function addCompletedEvent(todo) {
   todo.addEventListener("click", () => {
     todo.classList.toggle("completed");
@@ -99,6 +120,7 @@ function addCompletedEvent(todo) {
       alertMessage("Marked as incomplete");
     }
   });
+
 }
 
 function alertMessage(message){
@@ -107,4 +129,10 @@ function alertMessage(message){
   setTimeout(() => {
     alert.style.display = "none";
   }, 2000);
+}
+
+function isEmpty(){
+   if (!Object.keys(todos).length) {
+     alertMessage("😃 Add your first todo");
+   }
 }
