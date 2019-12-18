@@ -28,7 +28,7 @@ h1 {
   height: 90vh;
 }
 
-ul,
+.todos,
 .new-todo {
   background-color: beige;
   padding: 2vh;
@@ -36,7 +36,7 @@ ul,
   border-radius: 3px;
 }
 
-ul li {
+.todos .todo {
   border-bottom: solid 1px #2e2d2d;
   padding: 1vh;
 }
@@ -68,20 +68,26 @@ button {
   font-family: "Poppins", sans-serif;
 }
 
-li > .btn{
-    padding: 0px 5px;
-    margin: 0px 10px;
-    background-color: tomato;
-    display: none;
-    cursor: pointer;
+.todo > button {
+  padding: 1px 4px 1px 4px;
+  margin: 0px 10px;
+  background-color: tomato;
+  display: none;
+  cursor: pointer;
+  width: auto;
+  border-radius: 3px;
 }
 
-li:hover .btn{
-    display: inline;
+.todo:hover button {
+  display: inline;
+}
+
+.completed{
+  text-decoration: line-through;
 }
 
 @media screen and (max-width: 768px) {
-  ul,
+  .todos,
   .new-todo {
     width: 90%;
   }

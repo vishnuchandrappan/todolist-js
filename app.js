@@ -1,18 +1,18 @@
 const request = new XMLHttpRequest();
-let todos = [];
+let todos = {};
 let data = [];
-const todoList = document.querySelector("ul");
+let lastID = null;
+const todoList = document.querySelector(".todos");
 
 request.onload = function(data) {
   if (request.status >= 200 && request.status < 300) {
     data = JSON.parse(data.target.response);
-  } else {
-    console.log("Request Failed");
   }
 
   for (let i = 0; i < 3; i++) {
-    todos.push(data[i].title);
+    todos.push(data[i]);
   }
+  lastID = data[3].id;
 
   display();
 };
@@ -21,49 +21,60 @@ request.open("GET", "https://jsonplaceholder.typicode.com/todos");
 request.send();
 
 const btn = document.getElementById("add-todo");
-const todo = document.getElementById("todo");
+const todo = document.getElementById("new-todo");
 
 btn.addEventListener("click", () => {
-  todos.push(todo.value);
+  let obj = {
+    userId : 1,
+    id : lastID++,
+    title : todo.value,
+    completed : false
+  }
+  todos[obj.id]=obj;
   todo.value = "";
-  display();
+
+  addToList(obj);
+
 });
 
-function display() {
+function display(){
   todoList.innerHTML = "";
-  todos.forEach((todo,index) => {
-    let el = document.createElement("li");
-    let btn = document.createElement("span");
-    btn.innerText = 'X';
-    btn.id = "btn-"+index;
-    btn.classList.add('btn');
-    el.appendChild(btn);
-    title = document.createElement("span");
-    title.innerHTML = todo;
-    title.classList.add('title');
-    el.appendChild(title);
-    el.classList.add("todo-item");
-    el.id=index;
-    todoList.appendChild(el);
+  todos.forEach( todo => {
+    addToList(todo);
   });
+}
 
-  const todoItems = document.querySelectorAll(".todo-item .title");
+function addToList(obj) {
+  let el = document.createElement('div');
+  el.classList.add('todo');
+  el.id = obj.id;
+  let button = document.createElement('button');
+  button.id = "btn-"+obj.id;
+  button.innerText = "X";
+  addButtonEvent(button);
+  el.appendChild(button);
+  let title = document.createElement('span');
+  title.innerText = obj.title;
+  if (obj.completed) {
+    title.classList.add('completed');
+  }
+  addCompletedEvent(title);
+  el.appendChild(title);
+  todoList.appendChild(el);
+}
 
-  todoItems.forEach(todoItem => {
-    todoItem.addEventListener("click", () => {
-      todoItem.style.textDecoration == "line-through" ?
-      todoItem.style.textDecoration = "none" :
-      todoItem.style.textDecoration = "line-through"
-    });
+function addButtonEvent(button){
+  button.addEventListener("click", () => {
+    todos[button.parentElement.id] = {};
+    button.parentElement.remove();
   });
+}
 
-
-  const buttons = document.querySelectorAll('.todo-item .btn');
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click",() => {
-        todos.splice(btn.id.slice(4,6),1);
-        btn.parentElement.remove();
-    });
+function addCompletedEvent(todo){
+  todo.addEventListener("click",() => {
+    todo.classList.toggle('completed');
+    todos[todo.parentElement.id].completed == false ?
+    todos[todo.parentElement.id].completed = true :
+    todos[todo.parentElement.id].completed = false
   });
 }
