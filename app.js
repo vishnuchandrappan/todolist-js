@@ -20,6 +20,9 @@ request.onload = function(data) {
 request.open("GET", "https://jsonplaceholder.typicode.com/todos");
 request.send();
 
+
+// Adding New Todo
+
 const btn = document.getElementById("add-todo");
 const todo = document.getElementById("new-todo");
 const alert = document.querySelector(".alert");
@@ -41,13 +44,11 @@ btn.addEventListener("click", () => {
       }
     });
   } else {
-    alert.innerText = "Todo cannot be empty";
-    alert.style.display = "block";
-    setTimeout(() => {
-      alert.style.display = "none";
-    }, 2000);
+    alertMessage("Todo Cannot be empty");
   }
 });
+
+// function to display the available todos
 
 function display() {
   todoList.innerHTML = "";
@@ -79,6 +80,7 @@ function addButtonEvent(button) {
   button.addEventListener("click", () => {
     todos[button.parentElement.id] = {};
     button.parentElement.remove();
+    alertMessage("Todo Deleted");
   });
 }
 
@@ -89,4 +91,12 @@ function addCompletedEvent(todo) {
       ? (todos[todo.parentElement.id].completed = true)
       : (todos[todo.parentElement.id].completed = false);
   });
+}
+
+function alertMessage(message){
+  alert.innerText = message;
+  alert.style.display = "block";
+  setTimeout(() => {
+    alert.style.display = "none";
+  }, 2000);
 }
