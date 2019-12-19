@@ -1,7 +1,7 @@
 const request = new XMLHttpRequest();
 let todos = {};
 let data = [];
-let lastID = null;
+var lastID = null;
 const todoList = document.querySelector(".todos");
 
 request.onload = function(data) {
@@ -12,7 +12,7 @@ request.onload = function(data) {
   for (let i = 0; i < 3; i++) {
     todos[data[i].id] = data[i];
   }
-  lastID = data[3].id;
+  lastID = data[2].id;
 
   display();
 };
@@ -27,13 +27,23 @@ const todo = document.getElementById("new-todo");
 const alert = document.querySelector(".alert");
 
 btn.addEventListener("click", () => {
+  addTodos();
+});
+
+todo.addEventListener("keyup", (event) => {
+  if (event.keyCode == 13) {
+    addTodos();
+  }
+});
+
+function addTodos(){
   if (todo.value) {
     let values = todo.value.split(",");
     values.forEach(value => {
       if (value.trim()) {
         let obj = {
           userId: 1,
-          id: lastID++,
+          id: ++lastID,
           title: value.trim(),
           completed: false
         };
@@ -46,7 +56,7 @@ btn.addEventListener("click", () => {
     alertMessage("Todo Cannot be empty");
   }
   setData();
-});
+}
 
 // function to display the available todos
 
