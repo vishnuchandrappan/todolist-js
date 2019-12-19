@@ -74,12 +74,12 @@ function addToList(obj) {
   el.classList.add("todo");
   el.id = obj.id;
   let button = document.createElement("button");
-  button.id = "btn-" + obj.id;
+  // button.id = "btn-" + obj.id;
   button.innerText = "✖️";
   addButtonEvent(button);
   el.appendChild(button);
   button = document.createElement("button");
-  button.id = "editBtn-" + obj.id;
+  // button.id = "editBtn-" + obj.id;
   button.innerText = "🖍";
   addEditButtonEvent(button);
   el.appendChild(button);
