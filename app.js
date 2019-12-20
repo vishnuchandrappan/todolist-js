@@ -153,7 +153,12 @@ function isEmpty(){
 }
 
 function setData() {
-  localStorage.myTodoListData = JSON.stringify(todos)
+  if (Object.keys(todos).length === 0) {
+    localStorage.clear();
+  }
+  else{
+    localStorage.myTodoListData = JSON.stringify(todos)
+  }
 }
 
 if(localStorage.myTodoListData) {
