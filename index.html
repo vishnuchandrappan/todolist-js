@@ -8,12 +8,20 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <h1>My Todo List</h1>
+    <h1>My Todo List <span id="hint-button">ℹ</span> </h1>
     <div class="container">
-        <div class="alert">alert</div>
+        <div class="alert"></div>
+        <div class="hint-container">
+          <span id="close-button">✖️</span>
+          <div class="hint"></div>
+          <div class="button-container">
+            <button disabled id="previous">👈 previous</button>
+            <button id="next">next 👉</button>
+          </div>
+        </div>
         <div class="new-todo">
             <input type="text" id="new-todo" placeholder="Add Todos : x, y, z">
-            <button id="add-todo">Add</button id="add-todo">
+            <button id="add-todo">Add</button>
         </div>
         <div class="todos">
         </div>

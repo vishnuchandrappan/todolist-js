@@ -51,7 +51,7 @@ function addTodos() {
         };
         todos[++lastID] = obj;
         todo.value = "";
-        addToList(obj,lastID);
+        addToList(obj, lastID);
       }
     });
   } else {
@@ -65,13 +65,13 @@ function addTodos() {
 function display() {
   todoList.innerHTML = "";
   for (let i in todos) {
-    addToList(todos[i],i);
+    addToList(todos[i], i);
   }
   isEmpty();
   setData();
 }
 
-function addToList(obj,position) {
+function addToList(obj, position) {
   let el = document.createElement("div");
   el.classList.add("todo");
   el.id = position;
@@ -157,9 +157,93 @@ function setData() {
   }
 }
 
+const hintContainer = document.querySelector(".hint-container");
+const hintBtn = document.getElementById("hint-button");
+const hint = document.querySelector(".hint");
+const nextBtn = document.getElementById("next");
+const previousBtn = document.getElementById("previous");
+const closeBtn = document.getElementById("close-button");
+
 if (localStorage.myTodoListData) {
   todos = JSON.parse(localStorage.myTodoListData);
   display();
 } else {
   request.send();
+  hintContainer.style.animation = "bodyAnim 0.4s";
+  setTimeout(() => {
+    hintContainer.style.display = "flex";
+  }, 400);
 }
+
+const greeting =
+  "Hello World 😃,<br>seems like you're using todo for the first time <br><br>Let's kickstart with a simple tutorial";
+const hints = [
+  "Add your todos with  text box <input disabled/> and <button> ADD </button> button",
+  `Add more than one todo separated by commas <input disabled value='foo, bar, baz...'/>`,
+  `Click on each todo for marking it as <span>done</span> & one more click can mark it as <span>not done</span>`,
+  `Hover on each todo for <button disabled>edit</button> and <button disabled>delete</button> buttons`,
+  `After editing click anywhere out side the text box to save <div><input disabled value ='Edited Todo'/></div>`,
+  `We'he provided some sample todos for you to get familiarized`,
+  `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <span>ℹ</span> at the top-right corner`
+];
+var currentHint = null;
+
+hint.innerHTML = greeting;
+nextBtn.addEventListener("click", () => {
+  if (currentHint == null) {
+    currentHint = 0;
+    previousBtn.disabled = true;
+  } else {
+    currentHint++;
+    manageButtons();
+  }
+  setHint();
+});
+
+previousBtn.addEventListener("click", () => {
+  if (currentHint != 0) {
+    currentHint--;
+    manageButtons();
+  }
+  setHint();
+});
+
+function manageButtons() {
+  closeBtn.style.animation = "";
+  if (currentHint == 0) {
+    previousBtn.disabled = true;
+  } else {
+    previousBtn.disabled = false;
+  }
+  if (currentHint == hints.length - 1) {
+    nextBtn.disabled = true;
+    closeBtn.style.animation = "pulseAnim 1s infinite alternate";
+  } else {
+    nextBtn.disabled = false;
+  }
+}
+
+function setHint() {
+  hint.style.animation = "hintAnim 0.5s ease";
+  setTimeout(() => {
+    hint.innerHTML =
+      currentHint + 1 + " / " + hints.length + "<br>" + hints[currentHint];
+  }, 200);
+  setTimeout(() => {
+    hint.style.animation = "";
+  }, 500);
+}
+
+closeBtn.addEventListener("click", () => {
+  hintContainer.style.animation = "bodyAnim 0.4s reverse";
+  setTimeout(() => {
+    hintContainer.style.display = "none";
+  }, 400);
+});
+
+hintBtn.addEventListener("click", () => {
+  hintContainer.style.animation = "bodyAnim 0.4s";
+  setTimeout(() => {
+    hintContainer.style.display = "flex";
+  }, 400);
+});
