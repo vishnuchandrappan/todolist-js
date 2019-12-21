@@ -3,6 +3,7 @@ let todos = {};
 let data = [];
 var lastID = null;
 const todoList = document.querySelector(".todos");
+const allowed = ["title", "completed"];
 
 request.onload = function(data) {
   if (request.status >= 200 && request.status < 300) {
@@ -10,15 +11,18 @@ request.onload = function(data) {
   }
 
   for (let i = 0; i < 3; i++) {
-    todos[data[i].id] = data[i];
+    todos[++lastID] = Object.keys(data[i])
+      .filter(key => allowed.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = data[i][key];
+        return obj;
+      }, {});
   }
-  lastID = data[2].id;
 
   display();
 };
 
 request.open("GET", "https://jsonplaceholder.typicode.com/todos");
-
 
 // Adding New Todo
 
@@ -30,26 +34,24 @@ btn.addEventListener("click", () => {
   addTodos();
 });
 
-todo.addEventListener("keyup", (event) => {
+todo.addEventListener("keyup", event => {
   if (event.keyCode == 13) {
     addTodos();
   }
 });
 
-function addTodos(){
+function addTodos() {
   if (todo.value) {
     let values = todo.value.split(",");
     values.forEach(value => {
       if (value.trim()) {
         let obj = {
-          userId: 1,
-          id: ++lastID,
           title: value.trim(),
           completed: false
         };
-        todos[obj.id] = obj;
+        todos[++lastID] = obj;
         todo.value = "";
-        addToList(obj);
+        addToList(obj,lastID);
       }
     });
   } else {
@@ -63,23 +65,21 @@ function addTodos(){
 function display() {
   todoList.innerHTML = "";
   for (let i in todos) {
-    addToList(todos[i]);
+    addToList(todos[i],i);
   }
   isEmpty();
   setData();
 }
 
-function addToList(obj) {
+function addToList(obj,position) {
   let el = document.createElement("div");
   el.classList.add("todo");
-  el.id = obj.id;
+  el.id = position;
   let button = document.createElement("button");
-  // button.id = "btn-" + obj.id;
   button.innerText = "✖️";
   addButtonEvent(button);
   el.appendChild(button);
   button = document.createElement("button");
-  // button.id = "editBtn-" + obj.id;
   button.innerText = "🖍";
   addEditButtonEvent(button);
   el.appendChild(button);
@@ -109,11 +109,11 @@ function addButtonEvent(button) {
 function addEditButtonEvent(button) {
   button.addEventListener("click", () => {
     let el = document.getElementById(button.parentElement.id).childNodes[2];
-    let input = document.createElement('input');
+    let input = document.createElement("input");
     input.type = "text";
     input.value = el.innerText;
-    el.innerText="";
-    input.addEventListener("change" , () => {
+    el.innerText = "";
+    input.addEventListener("change", () => {
       el.innerText = input.value;
       todos[el.parentElement.id].title = input.value;
       setData();
@@ -125,20 +125,17 @@ function addCompletedEvent(todo) {
   todo.addEventListener("click", () => {
     todo.classList.toggle("completed");
     if (!todos[todo.parentElement.id].completed) {
-      todos[todo.parentElement.id].completed = true
+      todos[todo.parentElement.id].completed = true;
       alertMessage("Marked as Done");
-    }
-    else{
-      todos[todo.parentElement.id].completed = false
+    } else {
+      todos[todo.parentElement.id].completed = false;
       alertMessage("Marked as incomplete");
     }
     setData();
   });
-
-
 }
 
-function alertMessage(message){
+function alertMessage(message) {
   alert.innerText = message;
   alert.style.display = "block";
   setTimeout(() => {
@@ -146,23 +143,22 @@ function alertMessage(message){
   }, 2000);
 }
 
-function isEmpty(){
-   if (!Object.keys(todos).length) {
-     alertMessage("😃 Add your first todo");
-   }
+function isEmpty() {
+  if (!Object.keys(todos).length) {
+    alertMessage("😃 Add your first todo");
+  }
 }
 
 function setData() {
   if (Object.keys(todos).length === 0) {
     localStorage.clear();
-  }
-  else{
-    localStorage.myTodoListData = JSON.stringify(todos)
+  } else {
+    localStorage.myTodoListData = JSON.stringify(todos);
   }
 }
 
-if(localStorage.myTodoListData) {
-  todos = JSON.parse(localStorage.myTodoListData)
+if (localStorage.myTodoListData) {
+  todos = JSON.parse(localStorage.myTodoListData);
   display();
 } else {
   request.send();
