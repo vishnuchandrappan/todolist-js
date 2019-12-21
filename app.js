@@ -167,6 +167,7 @@ const closeBtn = document.getElementById("close-button");
 if (localStorage.myTodoListData) {
   todos = JSON.parse(localStorage.myTodoListData);
   display();
+  currentHint=0;
 } else {
   request.send();
   hintContainer.style.animation = "bodyAnim 0.4s";
