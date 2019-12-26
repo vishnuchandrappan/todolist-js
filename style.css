@@ -269,3 +269,12 @@ button {
 h1 span {
   float: right;
 }
+
+input[type='checkbox']{
+  width: 30px;
+}
+
+.todo{
+  display: flex;
+  align-items: center;
+}

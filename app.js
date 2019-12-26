@@ -83,12 +83,16 @@ function addToList(obj, position) {
   button.innerText = "🖍";
   addEditButtonEvent(button);
   el.appendChild(button);
+  let input = document.createElement("input");
+  input.type = "checkbox";
+  addCompletedEvent(input);
   let title = document.createElement("span");
   title.innerText = obj.title;
   if (obj.completed) {
     title.classList.add("completed");
+    input.checked = true;
   }
-  addCompletedEvent(title);
+  el.appendChild(input);
   el.appendChild(title);
   todoList.appendChild(el);
 }
@@ -123,7 +127,8 @@ function addEditButtonEvent(button) {
 }
 function addCompletedEvent(todo) {
   todo.addEventListener("click", () => {
-    todo.classList.toggle("completed");
+    let title = todo.parentElement.childNodes[3];
+    title.classList.toggle("completed");
     if (!todos[todo.parentElement.id].completed) {
       todos[todo.parentElement.id].completed = true;
       alertMessage("Marked as Done");
@@ -181,10 +186,10 @@ const greeting =
 const hints = [
   "Add your todos with  text box <input disabled/> and <button> ADD </button> button",
   `Add more than one todo separated by commas <input disabled value='foo, bar, baz...'/>`,
-  `Click on each todo for marking it as <span>done</span> & one more click can mark it as <span>not done</span>`,
+  `Use checkbox <input type="checkbox" readonly/> for marking todos as done / not done`,
   `Hover on each todo for <button disabled>edit</button> and <button disabled>delete</button> buttons`,
   `After editing click anywhere out side the text box to save <div><input disabled value ='Edited Todo'/></div>`,
-  `We'he provided some sample todos for you to get familiarized`,
+  `We've provided some sample todos for you to get familiarized, try editing & deleting those`,
   `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <span>ℹ</span> at the top-right corner`
 ];
 var currentHint = null;
