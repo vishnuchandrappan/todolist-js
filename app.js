@@ -233,7 +233,7 @@ function setHint() {
   hint.style.animation = "hintAnim 0.5s ease";
   setTimeout(() => {
     hint.innerHTML =
-      currentHint + 1 + " / " + hints.length + "<br>" + hints[currentHint];
+      currentHint + 1 + " / " + hints.length + "<br><br>" + hints[currentHint];
   }, 200);
   setTimeout(() => {
     hint.style.animation = "";

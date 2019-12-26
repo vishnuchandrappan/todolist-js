@@ -9,15 +9,16 @@
 }
 
 body {
-  background: linear-gradient(to bottom, #f3f6ff, #b4c7ff);
+  background: linear-gradient(to bottom, #f3f6ff, #093848);
   height: 100vh;
   font-family: "Poppins", sans-serif;
   animation: bodyAnim 1s ease;
 }
 
 h1 {
-  background-color: #b4c7ff;
+  background-color: #093848;
   padding: 2vh;
+  color:white;
 }
 
 .container {
@@ -200,6 +201,7 @@ button {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding:10px;
 }
 
 .hint button {
