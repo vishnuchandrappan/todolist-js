@@ -112,7 +112,7 @@ function addButtonEvent(button) {
 
 function addEditButtonEvent(button) {
   button.addEventListener("click", () => {
-    let el = document.getElementById(button.parentElement.id).childNodes[2];
+    let el = document.getElementById(button.parentElement.id).childNodes[3];
     let input = document.createElement("input");
     input.type = "text";
     input.value = el.innerText;

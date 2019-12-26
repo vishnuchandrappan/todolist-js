@@ -53,14 +53,16 @@ input {
   padding: 1vh;
   border-radius: 5px 0px 0px 5px;
   font-size: 18px;
+  box-shadow: inset 0px 0px 3px 0px;
 }
 
 button {
   width: 20%;
-  background-color: #12a8ff;
+  background-color: rgba(9,56,72,0.7);
   border-radius: 0px 5px 5px 0px;
   letter-spacing: 2px;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 input,
@@ -123,7 +125,7 @@ button {
 .alert {
   display: none;
   position: absolute;
-  top: 9vh;
+  top: 10vh;
   right: 10px;
   background-color: tomato;
   padding: 10px 30px;
@@ -204,6 +206,10 @@ button {
   padding:10px;
 }
 
+.hint input{
+  border-radius: 3px;
+}
+
 .hint button {
   color: black;
   border-radius: 5px;
@@ -279,4 +285,12 @@ input[type='checkbox']{
 .todo{
   display: flex;
   align-items: center;
+}
+
+.todo > input[type="checkbox"], .hint > input[type="checkbox"]{
+  box-shadow: none;
+}
+
+#add-todo{
+  color:white;
 }
