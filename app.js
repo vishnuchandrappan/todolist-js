@@ -1,255 +1,183 @@
-const request = new XMLHttpRequest();
+const todoBtn = document.getElementById("new-todo-btn");
+const todoInput = document.getElementById("new-todo-field");
+const alertContainer = document.querySelector(".alert-container");
+const todosContainer = document.getElementById("todos");
+
 let todos = {};
-let data = [];
-var lastID = null;
-const todoList = document.querySelector(".todos");
-const allowed = ["title", "completed"];
 
-request.onload = function(data) {
-  if (request.status >= 200 && request.status < 300) {
-    data = JSON.parse(data.target.response);
+// adding new todo
+todoBtn.addEventListener("click", () => {
+  // input validation
+  if (!todoInput.value) {
+    alert("danger", "Todo cannot be empty");
   }
 
-  for (let i = 0; i < 3; i++) {
-    todos[++lastID] = Object.keys(data[i])
-      .filter(key => allowed.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = data[i][key];
-        return obj;
-      }, {});
+  let length = Object.keys(todos).length; // length of todos
+  length = length ? length : 0;
+
+  let todoValues = todoInput.value.split(","); // getting comma separated todo values
+
+  todoValues.forEach(todoValue => {
+    if (todoValue.trim()) {
+      todos[length++] = {
+        title: todoValue,
+        completed: false
+      };
+      alert("success", "Todo Added");
+    }
+  });
+
+  todoInput.value = "";
+  render();
+});
+
+// inserting to dom
+render = () => {
+  todosContainer.innerHTML = "";
+  for (const key in todos) {
+    let el = document.createElement("div"); // new todo div
+    el.classList.add("todo");
+    el.id = key;
+
+    let child = document.createElement("input"); // checkbox for todo
+    child.type = "checkbox";
+    if (todos[key].completed) {
+      child.checked = true;
+    }
+    toggleTodo(child);
+    el.appendChild(child);
+
+    child = document.createElement("span"); // span for todo title
+    child.innerText = todos[key].title;
+    child.classList.add("content");
+    child.contentEditable = false;
+    if (todos[key].completed) {
+      child.classList.add("completed");
+    }
+    el.appendChild(child);
+
+    child = document.createElement("button"); // delete button
+    child.innerText = "✖️";
+    child.classList.add("delete");
+    deleteTodo(child);
+    el.appendChild(child);
+
+    child = document.createElement("button"); // edit button
+    child.innerText = "🖍";
+    child.classList.add("edit");
+    editTodo(child);
+    el.appendChild(child);
+
+    todosContainer.appendChild(el); //adding todo to dom
   }
 
-  display();
+  saveToLocalStorage();
 };
 
-request.open("GET", "https://jsonplaceholder.typicode.com/todos");
+// custom alert messages
+alert = (type, message) => {
+  let el = document.createElement("div"); //div for alert
+  el.classList.add("alert"); // classes for div
+  el.classList.add(type);
+  el.innerText = message; // message text
 
-// Adding New Todo
+  alertContainer.appendChild(el); // adding alert to dom
 
-const btn = document.getElementById("add-todo");
-const todo = document.getElementById("new-todo");
-const alert = document.querySelector(".alert");
+  // removing alert from container
+  setTimeout(() => {
+    alertContainer.removeChild(el);
+  }, 3000);
+};
 
-btn.addEventListener("click", () => {
-  addTodos();
-});
+// saving todos to localStorage
+saveToLocalStorage = () => {
+  localStorage.todoListData = JSON.stringify(todos);
+};
 
-todo.addEventListener("keyup", event => {
-  if (event.keyCode == 13) {
-    addTodos();
-  }
-});
-
-function addTodos() {
-  if (todo.value) {
-    let values = todo.value.split(",");
-    values.forEach(value => {
-      if (value.trim()) {
-        let obj = {
-          title: value.trim(),
-          completed: false
-        };
-        todos[++lastID] = obj;
-        todo.value = "";
-        addToList(obj, lastID);
-      }
-    });
-  } else {
-    alertMessage("Todo Cannot be empty");
-  }
-  setData();
-}
-
-// function to display the available todos
-
-function display() {
-  todoList.innerHTML = "";
-  for (let i in todos) {
-    addToList(todos[i], i);
-  }
-  isEmpty();
-  setData();
-}
-
-function addToList(obj, position) {
-  let el = document.createElement("div");
-  el.classList.add("todo");
-  el.id = position;
-  let button = document.createElement("button");
-  button.innerText = "✖️";
-  addButtonEvent(button);
-  el.appendChild(button);
-  button = document.createElement("button");
-  button.innerText = "🖍";
-  addEditButtonEvent(button);
-  el.appendChild(button);
-  let input = document.createElement("input");
-  input.type = "checkbox";
-  addCompletedEvent(input);
-  let title = document.createElement("span");
-  title.innerText = obj.title;
-  if (obj.completed) {
-    title.classList.add("completed");
-    input.checked = true;
-  }
-  el.appendChild(input);
-  el.appendChild(title);
-  todoList.appendChild(el);
-}
-
-function addButtonEvent(button) {
-  button.addEventListener("click", () => {
-    delete todos[button.parentElement.id];
-    button.parentElement.style.animation = "deleteAnim 1s ease";
-    setTimeout(() => {
-      button.parentElement.remove();
-    }, 800);
-    alertMessage("Todo Deleted");
-    isEmpty();
-    setData();
+// toggle button event
+toggleTodo = el => {
+  el.addEventListener("click", () => {
+    todos[el.parentElement.id].completed = !todos[el.parentElement.id]
+      .completed;
+    render();
+    alert(
+      "success",
+      todos[el.parentElement.id].completed ? "Marked as done" : "Marked as todo"
+    );
   });
-}
+};
 
-function addEditButtonEvent(button) {
-  button.addEventListener("click", () => {
-    let el = document.getElementById(button.parentElement.id).childNodes[3];
-    let input = document.createElement("input");
-    input.type = "text";
-    input.value = el.innerText;
-    el.innerText = "";
-    input.addEventListener("change", () => {
-      el.innerText = input.value;
-      todos[el.parentElement.id].title = input.value;
-      setData();
-    });
-    el.appendChild(input);
-  });
-}
-function addCompletedEvent(todo) {
-  todo.addEventListener("click", () => {
-    let title = todo.parentElement.childNodes[3];
-    title.classList.toggle("completed");
-    if (!todos[todo.parentElement.id].completed) {
-      todos[todo.parentElement.id].completed = true;
-      alertMessage("Marked as Done");
+// delete todo
+deleteTodo = el => {
+  el.addEventListener("click", () => {
+    if (confirm("You sure ?")) {
+      delete todos[el.parentElement.id];
+      render();
+      alert("success", "Todo deleted");
     } else {
-      todos[todo.parentElement.id].completed = false;
-      alertMessage("Marked as incomplete");
+      alert("danger", "Todo not deleted");
     }
-    setData();
   });
-}
+};
 
-function alertMessage(message) {
-  alert.innerText = message;
-  alert.style.display = "block";
-  setTimeout(() => {
-    alert.style.display = "none";
-  }, 2000);
-}
+// edit todo
+editTodo = el => {
+  el.addEventListener("click", () => {
+    let todo = el.parentElement.children[1];
 
-function isEmpty() {
-  if (!Object.keys(todos).length) {
-    alertMessage("😃 Add your first todo");
-  }
-}
+    if (todo.contentEditable == "false") {
+      todo.contentEditable = true;
+      todo.addEventListener("keydown", e => {
+        // preventing multi line input
+        if (e.key === "Enter") {
+          el.click();
+        }
+      });
+    } else {
+      todo.contentEditable = false;
+      todos[el.parentElement.id].title = todo.innerText;
+      render();
+    }
 
-function setData() {
-  if (Object.keys(todos).length === 0) {
-    localStorage.clear();
-  } else {
-    localStorage.myTodoListData = JSON.stringify(todos);
-  }
-}
+    el.innerText = el.innerText == "🖍" ? "✔️" : "🖍";
+  });
+};
 
-const hintContainer = document.querySelector(".hint-container");
-const hintBtn = document.getElementById("hint-button");
-const hint = document.querySelector(".hint");
-const nextBtn = document.getElementById("next");
-const previousBtn = document.getElementById("previous");
-const closeBtn = document.getElementById("close-button");
+// fetch data from JSON place holder
+fetchData = () => {
+  const request = new XMLHttpRequest();
+  const allowed = ["title", "completed"];
+  let data = [];
 
-if (localStorage.myTodoListData) {
-  todos = JSON.parse(localStorage.myTodoListData);
-  display();
-  currentHint=0;
-} else {
+  request.open("GET", "https://jsonplaceholder.typicode.com/todos?_limit=5");
   request.send();
-  hintContainer.style.animation = "bodyAnim 0.4s";
-  setTimeout(() => {
-    hintContainer.style.display = "flex";
-  }, 400);
-}
 
-const greeting =
-  "Hello World 😃,<br>seems like you're using todo for the first time <br><br>Let's kickstart with a simple tutorial";
-const hints = [
-  "Add your todos with  text box <input disabled/> and <button> ADD </button> button",
-  `Add more than one todo separated by commas <input disabled value='foo, bar, baz...'/>`,
-  `Use checkbox <input type="checkbox" readonly/> for marking todos as done / not done`,
-  `Hover on each todo for <button disabled>edit</button> and <button disabled>delete</button> buttons`,
-  `After editing click anywhere out side the text box to save <div><input disabled value ='Edited Todo'/></div>`,
-  `We've provided some sample todos for you to get familiarized, try editing & deleting those`,
-  `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <span>ℹ</span> at the top-right corner`
-];
-var currentHint = null;
+  request.onload = resp => {
+    if (request.status >= 200 && request.status < 300) {
+      data = JSON.parse(resp.target.response);
+    }
 
-hint.innerHTML = greeting;
-nextBtn.addEventListener("click", () => {
-  if (currentHint == null) {
-    currentHint = 0;
-    previousBtn.disabled = true;
+    data.forEach(todo => {
+      todos[todo.id] = Object.keys(todo)
+        .filter(key => allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = todo[key];
+          return obj;
+        }, {});
+    });
+
+    render();
+  };
+};
+
+// fetching data  from local storage
+function ifTodoExists() {
+  if (localStorage.hasOwnProperty("todoListData")) {
+    todos = JSON.parse(localStorage.todoListData);
+    render();
   } else {
-    currentHint++;
-    manageButtons();
-  }
-  setHint();
-});
-
-previousBtn.addEventListener("click", () => {
-  if (currentHint != 0) {
-    currentHint--;
-    manageButtons();
-  }
-  setHint();
-});
-
-function manageButtons() {
-  closeBtn.style.animation = "";
-  if (currentHint == 0) {
-    previousBtn.disabled = true;
-  } else {
-    previousBtn.disabled = false;
-  }
-  if (currentHint == hints.length - 1) {
-    nextBtn.disabled = true;
-    closeBtn.style.animation = "pulseAnim 1s infinite alternate";
-  } else {
-    nextBtn.disabled = false;
+    fetchData();
   }
 }
 
-function setHint() {
-  hint.style.animation = "hintAnim 0.5s ease";
-  setTimeout(() => {
-    hint.innerHTML =
-      currentHint + 1 + " / " + hints.length + "<br><br>" + hints[currentHint];
-  }, 200);
-  setTimeout(() => {
-    hint.style.animation = "";
-  }, 500);
-}
-
-closeBtn.addEventListener("click", () => {
-  hintContainer.style.animation = "bodyAnim 0.4s reverse";
-  setTimeout(() => {
-    hintContainer.style.display = "none";
-  }, 400);
-});
-
-hintBtn.addEventListener("click", () => {
-  hintContainer.style.animation = "bodyAnim 0.4s";
-  setTimeout(() => {
-    hintContainer.style.display = "flex";
-  }, 400);
-});
+ifTodoExists();

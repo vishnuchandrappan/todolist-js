@@ -4,28 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Todo List</title>
+    <title>todolist | js</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <h1>My Todo List <span id="hint-button">ℹ</span> </h1>
+    <header>
+      <nav>
+        <h2 class="logo">My Todo List</h2>
+        <div class="info">i</div>
+      </nav>
+    </header>
+
     <div class="container">
-        <div class="alert"></div>
-        <div class="hint-container">
-          <span id="close-button">✖️</span>
-          <div class="hint"></div>
-          <div class="button-container">
-            <button disabled id="previous">👈 previous</button>
-            <button id="next">next 👉</button>
-          </div>
-        </div>
-        <div class="new-todo">
-            <input type="text" id="new-todo" placeholder="Add Todos : x, y, z">
-            <button id="add-todo">Add</button>
-        </div>
-        <div class="todos">
-        </div>
+      <div class="todos" id="todos">
+      </div>
+      <div class="todos new">
+        <form class="new-todo" onsubmit="event.preventDefault();">
+          <input
+            type="text"
+            id="new-todo-field"
+            placeholder="add todos: x, y, z, ..."
+          />
+          <button id="new-todo-btn" type="submit">Add Todos</button>
+        </form>
+      </div>
     </div>
+
+    <div class="alert-container">
+    </div>
+
+    <div class="hint-container">
+      <div class="hint" id="hint">lorem</div>
+      <div class="button-container">
+        <button disabled id="previous">👈 previous</button>
+        <button id="next">next 👉</button>
+      </div>
+    </div>
+
     <script src="./app.js"></script>
+    <script src="./hint.js"></script>
   </body>
 </html>
