@@ -12,8 +12,8 @@ todoBtn.addEventListener("click", () => {
     alert("danger", "Todo cannot be empty");
   }
 
-  let length = Object.keys(todos).length; // length of todos
-  length = length ? length : 0;
+  let keys = Object.keys(todos); // to find largest id
+  length = keys[keys.length-1]+1;
 
   let todoValues = todoInput.value.split(","); // getting comma separated todo values
 
