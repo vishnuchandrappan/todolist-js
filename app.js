@@ -5,6 +5,10 @@ const todosContainer = document.getElementById("todos");
 
 let todos = {};
 
+// to get unique Id for new todo
+function getUniqueId(){
+  return Math.random().toString(36).substr(2, 5);
+}
 // adding new todo
 todoBtn.addEventListener("click", () => {
   // input validation
@@ -12,14 +16,12 @@ todoBtn.addEventListener("click", () => {
     alert("danger", "Todo cannot be empty");
   }
 
-  let keys = Object.keys(todos); // to find largest id
-  length = keys[keys.length-1]+1;
 
   let todoValues = todoInput.value.split(","); // getting comma separated todo values
 
   todoValues.forEach(todoValue => {
     if (todoValue.trim()) {
-      todos[length++] = {
+      todos[getUniqueId()] = {
         title: todoValue,
         completed: false
       };
