@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>todolist | js</title>
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./main.css" />
   </head>
   <body>
     <header>
@@ -16,8 +16,7 @@
     </header>
 
     <div class="container">
-      <div class="todos" id="todos">
-      </div>
+      <div class="todos" id="todos"></div>
       <div class="todos new">
         <form class="new-todo" onsubmit="event.preventDefault();">
           <input
@@ -30,11 +29,17 @@
       </div>
     </div>
 
-    <div class="alert-container">
-    </div>
+    <div class="alert-container"></div>
 
     <div class="hint-container">
-      <div class="hint" id="hint">lorem</div>
+      <div class="theme-switch">
+        <span>Dark Mode</span>
+        <label class="switch" for="checkbox">
+          <input type="checkbox" id="checkbox" />
+          <div class="slider round"></div>
+        </label>
+      </div>
+      <div class="hint" id="hint"></div>
       <div class="button-container">
         <button disabled id="previous">👈 previous</button>
         <button id="next">next 👉</button>

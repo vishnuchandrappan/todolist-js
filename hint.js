@@ -9,7 +9,13 @@ var currentHint = null;
 // toggle button for hints
 info.addEventListener("click", () => {
   hintContainer.classList.toggle("hints-active");
-  info.innerText = info.innerText == "i" ? "x" : "i";
+  if (info.innerText === "i") {
+    info.innerText = "x";
+    document.querySelector(".container").style.height = "10vh";
+  } else {
+    info.innerText = "i";
+    document.querySelector(".container").style.height = "100%";
+  }
 });
 
 const greeting =
@@ -30,7 +36,7 @@ const hints = [
   "Add your todos with  text box <input disabled/> & press <button> Add Todos </button>",
   `Add more than one todo separated by commas <input disabled value='foo, bar, baz...'/>`,
   `Use checkbox <input type="checkbox" readonly/> for marking todos as done / not done`,
-  `Use <button>🖍</button> & <button>✖️</button> buttons for editing and deleting todos`,
+  `Use <div> <button>🖍</button> & <button>✖️</button> </div> buttons for editing and deleting todos`,
   `We've provided some sample todos for you to get familiarized, try editing & deleting those`,
   `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <div class="info">i</div> at the top-right corner`
 ];
@@ -82,4 +88,21 @@ function setHint() {
   setTimeout(() => {
     hint.style.animation = "";
   }, 500);
+}
+
+var checkbox = document.getElementById("checkbox");
+var doc = document.documentElement;
+
+checkbox.addEventListener("change", () => {
+  if (checkbox.checked) {
+    doc.setAttribute("data-theme", "dark");
+    localStorage.theme = "dark";
+  } else {
+    doc.setAttribute("data-theme", "light");
+    localStorage.theme = "light";
+  }
+});
+
+if(localStorage.hasOwnProperty("theme")) {
+    doc.setAttribute("data-theme", localStorage.theme);
 }
