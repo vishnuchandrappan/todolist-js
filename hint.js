@@ -30,9 +30,9 @@ const hints = [
   "Add your todos with  text box <input disabled/> & press <button> Add Todos </button>",
   `Add more than one todo separated by commas <input disabled value='foo, bar, baz...'/>`,
   `Use checkbox <input type="checkbox" readonly/> for marking todos as done / not done`,
-  `After editing click anywhere out side the text box to save <div><input disabled value ='Edited Todo'/></div>`,
+  `Use <button>🖍</button> & <button>✖️</button> buttons for editing and deleting todos`,
   `We've provided some sample todos for you to get familiarized, try editing & deleting those`,
-  `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <span>ℹ</span> at the top-right corner`
+  `That's it ! Enjoy... ❤️ <br> View these anytime by clicking <div class="info">i</div> at the top-right corner`
 ];
 
 // next button event
